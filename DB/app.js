@@ -20,6 +20,7 @@ import  submissionRoutes from './routes/submissionRoutes.js';
 import { enrollmentRoutes } from './routes/enrollmentRoutes.js';
 import { query } from './config/db.js';
 import { EnrollmentModel } from './models/enrollmentModel.js';
+import AnalyticRoutes from './routes/analyticRoutes.js';
 const app = express();
 app.use("/uploads", express.static("uploads"));
 
@@ -59,7 +60,10 @@ app.use(
 
 const enrollmentModel = new EnrollmentModel(query);
 const enrollmentController = new EnrollmentController(enrollmentModel);
-
+app.use((req, res, next) => {
+  res.setHeader('Cache-Control', 'no-store');
+  next();
+});
 app.use('/enrollments', enrollmentRoutes(enrollmentController));
 
 // Routes
@@ -69,11 +73,12 @@ app.use("/categories", categoryRoutes);
 app.use("/courses", courseRoutes);
 app.use("/modules", moduleRoutes);
 app.use("/lessons", lessonRoutes);
-app.use("/lessons", lessonRoutes);
 app.use("/quizzes", quizRoutes);
 app.use("/questions", questionRoutes);
 app.use("/", submissionRoutes);
 app.use('/', enrollmentRoutes(enrollmentController));
+app.use('/', AnalyticRoutes);
+
 
 // Health check
 app.get("/health", (req, res) => res.json({ status: "OK" }));

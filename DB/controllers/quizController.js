@@ -46,3 +46,21 @@ export const deleteQuiz = async (req, res) => {
     res.status(500).json({ error: 'Failed to delete quiz' });
   }
 };
+
+
+export const addQuizGrade = async (req, res) => {
+  try {
+    const { userId, lessonId, quizId, grade } = req.body;
+
+    if (!userId || !lessonId || !quizId || grade == null) {
+      return res.status(400).json({ error: 'All fields are required.' });
+    }
+
+    const newGrade = await QuizModel.addGrade(userId, lessonId, quizId, grade);
+    res.status(201).json(newGrade);
+  } catch (error) {
+    console.error('Error adding quiz grade:', error);
+    res.status(500).json({ error: 'Failed to add quiz grade.' });
+  }
+};
+

@@ -34,3 +34,13 @@ export const updateQuiz = async (id, quiz) => {
 export const deleteQuiz = async (id) => {
   await db.query('DELETE FROM quizzes WHERE id = $1', [id]);
 };
+export const addGrade = async (userId, lessonId, quizId, grade) => {
+  const query = `
+    INSERT INTO quiz_grades (user_id, lesson_id, quiz_id, grade)
+    VALUES ($1, $2, $3, $4)
+    RETURNING *;
+  `;
+  const values = [userId, lessonId, quizId, grade];
+  const result = await db.query(query, values);
+  return result.rows[0];
+};
