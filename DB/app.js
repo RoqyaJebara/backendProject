@@ -7,6 +7,8 @@ import "./config/db.js";
 import session from "express-session";
 import cookieParser from "cookie-parser";
 ////////////////////////////////////////////
+import authRoutes1 from "./routes/authRoutes1.js";
+
 import authRoutes from "./routes/authRoutes.js";
 import usersRouter from "./routes/usersRoutes.js";
 import categoryRoutes from "./routes/categoryRoutes.js";
@@ -51,7 +53,7 @@ app.use(
     cookie: {
       secure: process.env.NODE_ENV === "production",
       httpOnly: true,
-      maxAge: 24 * 60 * 60 * 1000, //for one day just (more than one day just mult*4 =>for four days )
+      maxAge: 24 * 60 * 60 * 1000, 
       sameSite: "strict",
     },
   })
@@ -67,7 +69,8 @@ app.use((req, res, next) => {
 app.use('/enrollments', enrollmentRoutes(enrollmentController));
 
 // Routes
-app.use("/api/auth", authRoutes);
+app.use("/api/auth1", authRoutes1);//google
+app.use("/api/auth", authRoutes);//normal
 app.use("/users", usersRouter);
 app.use("/categories", categoryRoutes);
 app.use("/courses", courseRoutes);
@@ -86,5 +89,7 @@ app.get("/health", (req, res) => res.json({ status: "OK" }));
 // Error handling
 app.use(notFound);
 app.use(errorHandler);
-
+app.get("/", (req, res) => {
+  res.send("API is running");
+});
 export default app;
