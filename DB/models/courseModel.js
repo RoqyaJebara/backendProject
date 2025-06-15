@@ -2,7 +2,15 @@ import pool from '../config/db.js';
 import { parseBoolean } from '../utils/validation.js';
 
 export const getAllCourses = async () => {
-  const res = await pool.query('SELECT * FROM courses');
+  const res = await pool.query(`SELECT 
+  courses.*, 
+  users.name AS instructor_name, 
+  users.email AS instructor_email
+FROM 
+  courses
+JOIN 
+  users ON courses.instructor_id = users.id;
+`);
   return res.rows;
 };
 
