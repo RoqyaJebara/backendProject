@@ -5,12 +5,14 @@ import {
   fetchQuestion,
   createQuestion,
   editQuestion,
-  removeQuestion
+  removeQuestion,
+  fetchQuestionsByQuizId
 } from '../controllers/questionController.js';
 
 const questionRoutes = express.Router();
 
 questionRoutes.get('/', fetchQuestions);
+questionRoutes.get('/:lessonId', fetchQuestionsByQuizId);
 questionRoutes.get('/:id', fetchQuestion);
 questionRoutes.post('/', createQuestion);
 questionRoutes.put('/:id', editQuestion);

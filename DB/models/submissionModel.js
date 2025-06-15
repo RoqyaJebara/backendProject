@@ -53,17 +53,26 @@ export const getSubmissionById = async (id) => {
 
 export const getAllSubmissions = async () => {
   const result = await db.query(`
-    SELECT 
-  submissions.*,
-  users.name AS student_name,
-  lessons.title AS lesson_name,
-    lessons.content AS lesson_content,
-  modules.title AS module_name,
-  courses.title AS course_title
-FROM submissions
-JOIN lessons ON submissions.lesson_id = lessons.id
-JOIN modules ON lessons.module_id = modules.id
-JOIN courses ON modules.course_id = courses.id
-JOIN users ON submissions.user_id = users.id`);
+SELECT
+  s.id,
+  s.user_id,
+  u.name AS student_name,
+  c.id AS course_id,
+  c.title AS course_title,
+  s.lesson_id,
+  l.title AS lesson_name,
+  l.content AS lesson_content,
+  s.submission_url,
+  s.grade,
+  s.feedback
+FROM submissions s
+JOIN users u ON s.user_id = u.id
+JOIN lessons l ON s.lesson_id = l.id
+JOIN modules m ON l.module_id = m.id
+JOIN courses c ON m.course_id = c.id
+WHERE
+ u.role = 'student'
+`);
   return result.rows;
 };
+
