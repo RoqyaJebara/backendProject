@@ -1,4 +1,4 @@
-import db from '../config/db.js'; // افترضنا أنك تملك ملف db.js لإعداد الاتصال بقاعدة البيانات
+import db from '../config/db.js'; 
 
 export const getAllQuizzes = async () => {
   const result = await db.query('SELECT * FROM quizzes ORDER BY id');
@@ -40,7 +40,38 @@ export const addGrade = async (userId, lessonId, quizId, grade) => {
     VALUES ($1, $2, $3, $4)
     RETURNING *;
   `;
+  console.log(`Adding grade: userId=${userId}, lessonId=${lessonId}, quizId=${quizId}, grade=${grade}`);
+  
   const values = [userId, lessonId, quizId, grade];
   const result = await db.query(query, values);
   return result.rows[0];
+};
+
+export const getAllQuizGrades = async () => {
+  const query = `
+SELECT 
+  qg.id, 
+  qg.lesson_id, 
+  qg.user_id, 
+  qg.quiz_id, 
+  qg.grade, 
+  qg.created_at,
+
+  u.name AS student_name,
+  l.title AS lesson_title,
+  m.title AS module_title,
+  c.id AS course_id,
+  c.title AS course_title,
+  
+  q.max_score
+
+FROM quiz_grades qg
+JOIN users u ON qg.user_id = u.id
+JOIN lessons l ON qg.lesson_id = l.id
+JOIN modules m ON l.module_id = m.id
+JOIN courses c ON m.course_id = c.id
+JOIN quizzes q ON qg.quiz_id = q.id;
+  `;
+  const { rows } = await db.query(query);
+  return rows;
 };

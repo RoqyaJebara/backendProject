@@ -64,3 +64,12 @@ export const addQuizGrade = async (req, res) => {
   }
 };
 
+export const fetchAllQuizGrades = async (req, res) => {
+  try {
+    const grades = await QuizModel.getAllQuizGrades(); 
+    res.json(grades);
+  } catch (error) {
+    console.error('Error fetching quiz grades:', error);
+    res.status(500).json({ error: 'Failed to fetch quiz grades' });
+  }
+};
