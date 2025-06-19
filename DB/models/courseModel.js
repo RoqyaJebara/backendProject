@@ -88,9 +88,9 @@ export const updateCourse = async (id, courseData) => {
     category_id,
     price,
     thumbnail_url,
-    is_approved,
     is_published,
   } = courseData;
+  const isPublished = 'true'
 
   const res = await pool.query(
     `UPDATE courses SET 
@@ -100,10 +100,9 @@ export const updateCourse = async (id, courseData) => {
       category_id = $4,
       price = $5,
       thumbnail_url = $6,
-      is_approved = $7,
-      is_published=$8,
+      is_published=$7,
       updated_at = NOW()
-    WHERE id = $9
+    WHERE id = $8
     RETURNING *`,
     [
       title,
@@ -112,8 +111,7 @@ export const updateCourse = async (id, courseData) => {
       category_id,
       price,
       thumbnail_url,
-      is_approved,
-      is_published,
+      isPublished,
       id,
     ]
   );

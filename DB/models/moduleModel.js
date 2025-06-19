@@ -34,5 +34,8 @@ export const updateModule = async (id, data) => {
 };
 
 export const deleteModule = async (id) => {
+  // حذف الدروس المرتبطة أولاً
+  await db.query("DELETE FROM lessons WHERE module_id = $1", [id]);
+  // ثم حذف الـ module
   await db.query("DELETE FROM modules WHERE id = $1", [id]);
 };
