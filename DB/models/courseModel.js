@@ -1,5 +1,5 @@
-import pool from '../config/db.js';
-import { parseBoolean } from '../utils/validation.js';
+import pool from "../config/db.js";
+import { parseBoolean } from "../utils/validation.js";
 
 export const getAllCourses = async () => {
   const res = await pool.query(`SELECT 
@@ -15,14 +15,14 @@ JOIN
 };
 
 export const getCourseById = async (id) => {
-  const res = await pool.query('SELECT * FROM courses WHERE id = $1', [id]);
+  const res = await pool.query("SELECT * FROM courses WHERE id = $1", [id]);
   return res.rows[0];
 };
 
-
 export const findCoursesByInstructor = async (instructorId) => {
   try {
-    const result = await pool.query(`
+    const result = await pool.query(
+      `
       SELECT 
         courses.id AS course_id,
         courses.title,
@@ -40,11 +40,13 @@ export const findCoursesByInstructor = async (instructorId) => {
       INNER JOIN categories ON categories.id=courses.category_id
       WHERE courses.instructor_id = $1
 	  
-    `, [instructorId]);
+    `,
+      [instructorId]
+    );
 
     return result.rows;
   } catch (error) {
-    console.error('Error fetching instructor courses:', error);
+    console.error("Error fetching instructor courses:", error);
     throw error;
   }
 };
@@ -58,13 +60,21 @@ export const createCourse = async (courseData) => {
     thumbnail_url,
     is_published,
   } = courseData;
-  const isPublishedBool = parseBoolean(is_published);
+  const isPublished = 'true'
 
   const res = await pool.query(
     `INSERT INTO courses 
     (title, description, instructor_id, category_id, price, thumbnail_url, is_published)
     VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *`,
-    [title, description, instructor_id, category_id, price, thumbnail_url, isPublishedBool]
+    [
+      title,
+      description,
+      instructor_id,
+      category_id,
+      price,
+      thumbnail_url,
+      isPublished,
+    ]
   );
 
   return res.rows[0];
@@ -95,7 +105,17 @@ export const updateCourse = async (id, courseData) => {
       updated_at = NOW()
     WHERE id = $9
     RETURNING *`,
-    [title, description, instructor_id, category_id, price, thumbnail_url, is_approved,is_published, id]
+    [
+      title,
+      description,
+      instructor_id,
+      category_id,
+      price,
+      thumbnail_url,
+      is_approved,
+      is_published,
+      id,
+    ]
   );
 
   return res.rows[0];
@@ -114,7 +134,7 @@ export const patchCourseApproval = async (id, is_approved) => {
 };
 
 export const deleteCourse = async (id) => {
-  await pool.query('DELETE FROM courses WHERE id = $1', [id]);
+  await pool.query("DELETE FROM courses WHERE id = $1", [id]);
 };
 export const getCoursesByCategory = async (categoryId) => {
   const CategoryId = parseInt(categoryId);
