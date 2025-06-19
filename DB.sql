@@ -5,7 +5,7 @@
 -- Dumped from database version 17.5
 -- Dumped by pg_dump version 17.5
 
--- Started on 2025-06-19 13:37:14
+-- Started on 2025-06-20 00:30:35
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -327,7 +327,7 @@ CREATE TABLE public.quiz_grades (
     lesson_id integer NOT NULL,
     user_id integer NOT NULL,
     quiz_id integer NOT NULL,
-    grade integer NOT NULL,
+    grade double precision NOT NULL,
     created_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -862,39 +862,39 @@ ALTER TABLE ONLY public.courses
 
 
 --
--- TOC entry 4878 (class 2606 OID 24782)
+-- TOC entry 4878 (class 2606 OID 25162)
 -- Name: courses courses_instructor_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.courses
-    ADD CONSTRAINT courses_instructor_id_fkey FOREIGN KEY (instructor_id) REFERENCES public.users(id);
+    ADD CONSTRAINT courses_instructor_id_fkey FOREIGN KEY (instructor_id) REFERENCES public.users(id) ON DELETE CASCADE;
 
 
 --
--- TOC entry 4879 (class 2606 OID 24808)
+-- TOC entry 4879 (class 2606 OID 25148)
 -- Name: enrollments enrollments_course_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.enrollments
-    ADD CONSTRAINT enrollments_course_id_fkey FOREIGN KEY (course_id) REFERENCES public.courses(id);
+    ADD CONSTRAINT enrollments_course_id_fkey FOREIGN KEY (course_id) REFERENCES public.courses(id) ON DELETE CASCADE;
 
 
 --
--- TOC entry 4880 (class 2606 OID 24803)
+-- TOC entry 4880 (class 2606 OID 25128)
 -- Name: enrollments enrollments_user_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.enrollments
-    ADD CONSTRAINT enrollments_user_id_fkey FOREIGN KEY (user_id) REFERENCES public.users(id);
+    ADD CONSTRAINT enrollments_user_id_fkey FOREIGN KEY (user_id) REFERENCES public.users(id) ON DELETE CASCADE;
 
 
 --
--- TOC entry 4889 (class 2606 OID 25044)
+-- TOC entry 4889 (class 2606 OID 25143)
 -- Name: quiz_grades fk_lesson; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.quiz_grades
-    ADD CONSTRAINT fk_lesson FOREIGN KEY (lesson_id) REFERENCES public.lessons(id);
+    ADD CONSTRAINT fk_lesson FOREIGN KEY (lesson_id) REFERENCES public.lessons(id) ON DELETE CASCADE;
 
 
 --
@@ -925,30 +925,30 @@ ALTER TABLE ONLY public.quizzes
 
 
 --
--- TOC entry 4891 (class 2606 OID 25049)
+-- TOC entry 4891 (class 2606 OID 25118)
 -- Name: quiz_grades fk_user; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.quiz_grades
-    ADD CONSTRAINT fk_user FOREIGN KEY (user_id) REFERENCES public.users(id);
+    ADD CONSTRAINT fk_user FOREIGN KEY (user_id) REFERENCES public.users(id) ON DELETE CASCADE;
 
 
 --
--- TOC entry 4882 (class 2606 OID 24843)
+-- TOC entry 4882 (class 2606 OID 25138)
 -- Name: lessons lessons_module_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.lessons
-    ADD CONSTRAINT lessons_module_id_fkey FOREIGN KEY (module_id) REFERENCES public.modules(id);
+    ADD CONSTRAINT lessons_module_id_fkey FOREIGN KEY (module_id) REFERENCES public.modules(id) ON DELETE CASCADE;
 
 
 --
--- TOC entry 4881 (class 2606 OID 24824)
+-- TOC entry 4881 (class 2606 OID 25153)
 -- Name: modules modules_course_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.modules
-    ADD CONSTRAINT modules_course_id_fkey FOREIGN KEY (course_id) REFERENCES public.courses(id);
+    ADD CONSTRAINT modules_course_id_fkey FOREIGN KEY (course_id) REFERENCES public.courses(id) ON DELETE CASCADE;
 
 
 --
@@ -988,15 +988,15 @@ ALTER TABLE ONLY public.submissions
 
 
 --
--- TOC entry 4886 (class 2606 OID 24899)
+-- TOC entry 4886 (class 2606 OID 25123)
 -- Name: submissions submissions_user_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.submissions
-    ADD CONSTRAINT submissions_user_id_fkey FOREIGN KEY (user_id) REFERENCES public.users(id);
+    ADD CONSTRAINT submissions_user_id_fkey FOREIGN KEY (user_id) REFERENCES public.users(id) ON DELETE CASCADE;
 
 
--- Completed on 2025-06-19 13:37:14
+-- Completed on 2025-06-20 00:30:36
 
 --
 -- PostgreSQL database dump complete
